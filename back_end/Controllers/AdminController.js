@@ -33,3 +33,37 @@ exports.createAdmin = async (req, res) => {
         });
     }
 };
+
+exports.loginAdmin = async (req, res) => {
+    try {
+        const userToBeLogged = req.body;
+        const admin = await Admin.findOne({ email: userToBeLogged.email });
+        if(!admin){
+            return res.status(400).json({
+                success: false,
+                message: 'Invalid email or password',
+            });
+        }
+        const isMatch = await bcrypt.compare(userToBeLogged.password, admin.password);
+        if (!isMatch) {
+            return res.status(400).json({
+                success: false,
+                message: 'Invalid email or password',
+            });
+        }
+        res.status(200).json({
+            success: true,
+            message: 'Logged in successfully',
+            data : {
+                admin
+            }
+        });
+    }
+    catch (error) {
+        console.log(error);
+        res.status(500).json({
+            success: false,
+            message: 'Server error occurred while creating admin',
+        });
+    }
+}
