@@ -34,3 +34,22 @@ exports.getAvenues = async(req, res) => {
         console.log(error);
     }
 }
+
+exports.deleteAvenue = async(req, res) => {
+    try{
+        const avenueToBeDeleted = await Modal.findByIdAndDelete(req.query.id)
+        if(avenueToBeDeleted){
+            res.status(200).json({
+                success: true,
+                data : null
+            })
+        }
+        res.status(404).json({
+            success: false,
+            message : "The Avenue with this ID does not exist"
+        })
+    }
+    catch (error){
+        console.log(error);
+    }
+}
