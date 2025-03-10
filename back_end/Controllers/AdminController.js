@@ -1,5 +1,7 @@
 const bcrypt = require('bcryptjs');
 const Admin = require('../Modals/AdminModal')
+const jwt = require('jsonwebtoken');
+require('dotenv').config();
 
 exports.createAdmin = async (req, res) => {
     try {
@@ -51,11 +53,20 @@ exports.loginAdmin = async (req, res) => {
                 message: 'Invalid email or password',
             });
         }
+        const accessToken = jwt.sign(
+            { id: admin._id, email: admin.email, name: admin.fName },
+            process.env.TOKEN_KEY,
+            { expiresIn: '1h' },
+        )
+
+        // const { password, ...adminData } = admin.toObject();
+
         res.status(200).json({
             success: true,
             message: 'Logged in successfully',
             data : {
-                admin
+                admin,
+                accessToken,
             }
         });
     }
@@ -63,7 +74,7 @@ exports.loginAdmin = async (req, res) => {
         console.log(error);
         res.status(500).json({
             success: false,
-            message: 'Server error occurred while creating admin',
+            message: 'Server error occurred while logging in admin',
         });
     }
 }
