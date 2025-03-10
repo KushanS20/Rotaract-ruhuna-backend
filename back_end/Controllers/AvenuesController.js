@@ -53,3 +53,25 @@ exports.deleteAvenue = async(req, res) => {
         console.log(error);
     }
 }
+
+
+exports.updateAvenue = async(req, res) => {
+    try{
+        const avenueToBeUpdated = await Modal.findByIdAndUpdate(req.query.id, req.body, { new:true })
+        if(avenueToBeUpdated){
+            res.status(200).json({
+                success: true,
+                data : {
+                    avenueToBeUpdated
+                }
+            })
+        }
+        res.status(404).json({
+            success: false,
+            message : "The Avenue with this ID does not exist"
+        })
+    }
+    catch (error) {
+        console.log(error)
+    }
+}
