@@ -1,48 +1,58 @@
 import React, { useState } from 'react';
 import { Mail, Lock, ArrowRight } from 'lucide-react';
-import  authService  from '../Services/authService.ts';
-import toast from "react-hot-toast";// Ensure the correct import
+import axios from "axios";
 
 interface SignInProps {
     onSignUp: () => void;
-    onAuthenticate: () => void; // ✅ Add this prop
+    onAuthenticate: () => void;
 }
-const initialState = {
-    email: "",
-    password: "",
-};
 
-export function SignIn({ onSignUp, onAuthenticate }: SignInProps) { // ✅ Accept `onAuthenticate`
-    const [formData, setFormData] = useState(initialState);
-    const [errorMessage, setErrorMessage] = useState('');
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target;
-        setFormData(prev => ({ ...prev, [name]: value }));
-    };
+export function SignIn({ onSignUp, onAuthenticate }: SignInProps) {
+    const [formData, setFormData] = useState({
+        email : '' , password : ''
+    })
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        console.log('Form data:', formData);
-        if (!formData.email.trim()) {
-            toast.error("User email is required");
-            return;
-        }
-
-        if (!formData.password.trim()) {
-            toast.error("User password is required");
-            return;
-        }
-        try {
-            const response = await authService.signin(formData.email, formData.password);
-            if (response.success) {
-                onAuthenticate(); // Call the onAuthenticate function on success
+    const handleEmailChange = (e) =>{
+        setFormData((prev)=>{
+            return{
+                ...prev,
+                email: e.target.value
             }
-        } catch (error: any) { // Specify 'any' if you want to use the error object
-            setErrorMessage('Invalid email or password');
-            console.error('Error:', error); // You can log the error to the console
+        })
+    }
+
+    const handlePassword = (e) =>{
+        setFormData((prev)=>{
+            return{
+                ...prev,
+                password: e.target.value
+            }
+        })
+    }
+
+
+    const handleSubmit = async(e) =>{
+        e.preventDefault();
+        let {email,password} = formData;
+        try{
+            let user = {
+                email:email, password: password
+            }
+            await axios.post('http://localhost:3001/api/v1/admin/sign-up',user)
+            //dan podi loading ekak dala thappara 2k wage  idaladashboard eka pennapan, bolt eken gattu ea mage wada krnne ndda koheda ,
+            // frontend eka run une nha, mkk hari awlk thynwa, edath zykode site eka run une nha ube eken hdala ewwat apsse,
+            // Ara ube kalin thibba code eka mata therum ganna amarui, mn fronet eke api call krnne mehema, wenam function ekaka hadala base url dala nemei mn hdnne,
+            //adaala thanata meh wage function eka aaye aaye liynwa
+            // Services folder eke thyna js files deka dn one nha, meke error ekak ewi, eka hadagena plyn methanina eha lesi tikak  thynne, mata test krnna bha code eka frontend eka run wenne narthi nisa
+            //Guna busa
         }
-    };
+        catch(err){
+            console.log(err);
+        }
+
+
+    }
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-indigo-100 to-white flex items-center justify-center p-4">
@@ -63,7 +73,7 @@ export function SignIn({ onSignUp, onAuthenticate }: SignInProps) { // ✅ Accep
                                 type="email"
                                 name="email"
                                 value={formData.email}
-                                onChange={handleChange}
+                                onChange={handleEmailChange}
                                 className="pl-10 block w-full rounded-lg border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
                                 placeholder="Enter your email"
                                 required
@@ -81,15 +91,13 @@ export function SignIn({ onSignUp, onAuthenticate }: SignInProps) { // ✅ Accep
                                 type="password"
                                 name="password"
                                 value={formData.password}
-                                onChange={handleChange}
+                                onChange={handlePassword}
                                 className="pl-10 block w-full rounded-lg border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
                                 placeholder="Enter your password"
                                 required
                             />
                         </div>
                     </div>
-
-                    {errorMessage && <p className="text-red-500 text-sm">{errorMessage}</p>}
 
                     <div className="flex items-center justify-between">
                         <div className="flex items-center">
