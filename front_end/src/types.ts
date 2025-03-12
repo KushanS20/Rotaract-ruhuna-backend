@@ -22,3 +22,12 @@ export interface Blog {
   date: string;
   readTime: string;
 }
+
+export interface Admin {
+  fName: string;
+  lName: string;
+  clubIdNumber: string;
+  StudentNumber: string;
+  email: string;
+  password: string;
+}

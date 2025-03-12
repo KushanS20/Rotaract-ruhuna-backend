@@ -1,10 +1,10 @@
-import axios from "axios";
+import axios from 'axios';
 
-const ApiAdmin  = axios.create({
-    baseURL: "http://localhost:3001/",
-    headers:{
-        "Content-Type": "application/json"
-    }
+const API_URL = 'http://localhost:5000/api'; // Update with your backend URL
+
+export const api = axios.create({
+  baseURL: API_URL,
+  headers: {
+    'Content-Type': 'application/json',
+  },
 });
-
-export default ApiAdmin;

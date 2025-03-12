@@ -1,3 +1,4 @@
+import React from 'react';
 import { Plus, Save } from 'lucide-react';
 import { ProjectForm } from './ProjectForm';
 import type { Avenue } from '../types';
@@ -9,7 +10,7 @@ interface AvenueFormProps {
   onImageRemove: (index: number) => void;
 }
 
-export function AvenueForm({ projectImages, onImageAdd, onImageRemove }: AvenueFormProps) {
+export function AvenueForm({ avenue, projectImages, onImageAdd, onImageRemove }: AvenueFormProps) {
   return (
     <div className="bg-white rounded-lg shadow p-6">
       <h2 className="text-2xl font-semibold text-gray-900 mb-6">Add/Edit Avenue</h2>
