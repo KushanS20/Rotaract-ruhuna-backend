@@ -1,3 +1,4 @@
+import React from 'react';
 import { LayoutGrid, PenSquare } from 'lucide-react';
 
 interface TabSelectorProps {
